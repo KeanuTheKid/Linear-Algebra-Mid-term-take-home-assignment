@@ -57,12 +57,13 @@ def gen_matrices(size):
 with open('matrix_times.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
     # header
-    writer.writerow(['Matrixgröße', 'Laufzeit Eigene Implementierung (s)', 'Laufzeit NumPy (s)'])
+    writer.writerow(['size', 'Own Function', 'NumPy'])
     
     
-    for i in range(2, 200):
-        A = gen_matrices(i)
-        B = gen_matrices(i)
+    for i in range(1, 10):
+        size = 2**i
+        A = gen_matrices(size)
+        B = gen_matrices(size)
 
         start_time = time.time()
         multiplication = matrix_multiplication(A, B)
@@ -76,6 +77,6 @@ with open('matrix_times.csv', mode='w', newline='') as file:
         end_time = time.time()
         np_computing_time = (end_time - start_time)
 
-        print(f"size: {i} own function: {computing_time}s , numpy: {np_computing_time}s")
-        writer.writerow([i, computing_time, np_computing_time])
+        print(f"size: {size} own function: {computing_time}s , numpy: {np_computing_time}s")
+        writer.writerow([size, computing_time, np_computing_time])
 
