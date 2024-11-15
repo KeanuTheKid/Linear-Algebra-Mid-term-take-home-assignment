@@ -54,29 +54,57 @@ def gen_matrices(size):
 
 
 
-with open('matrix_times.csv', mode='w', newline='') as file:
+# with open('size_speed_comparison.csv', mode='w', newline='') as file:
+#     writer = csv.writer(file)
+#     # header
+#     writer.writerow(['size', 'Own Function', 'NumPy'])
+    
+    
+#     for i in range(1, 11):
+#         size = 2**i
+#         A = gen_matrices(size)
+#         B = gen_matrices(size)
+
+#         start_time = time.time()
+#         multiplication = matrix_multiplication(A, B)
+#         end_time = time.time()
+#         computing_time = (end_time - start_time)
+
+#         np_A = np.array(A)
+#         np_B = np.array(B)
+#         start_time = time.time()
+#         np_multiplication = np.matmul(np_A, np_B)
+#         end_time = time.time()
+#         np_computing_time = (end_time - start_time)
+
+#         print(f"size: {size} own function: {computing_time}s , numpy: {np_computing_time}s")
+#         writer.writerow([size, computing_time, np_computing_time])
+with open('amount_speed_comparison.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
-    # header
-    writer.writerow(['size', 'Own Function', 'NumPy'])
+    #header
+    writer.writerow(['Multiplications', 'Own Function Time', 'NumPy Time'])
     
-    
-    for i in range(1, 10):
-        size = 2**i
+    amount_of_multiplications = [1, 2, 5, 10, 50, 100, 300, 500, 1000]
+    size = 2
+
+    for num_multiplications in amount_of_multiplications:
         A = gen_matrices(size)
         B = gen_matrices(size)
-
         start_time = time.time()
-        multiplication = matrix_multiplication(A, B)
+        for _ in range(num_multiplications):
+            multiplication = matrix_multiplication(A, B)
         end_time = time.time()
-        computing_time = (end_time - start_time)
+        custom_computing_time = end_time - start_time
 
         np_A = np.array(A)
         np_B = np.array(B)
         start_time = time.time()
-        np_multiplication = np.matmul(np_A, np_B)
+        for _ in range(num_multiplications):
+            np_multiplication = np.matmul(np_A, np_B)
         end_time = time.time()
-        np_computing_time = (end_time - start_time)
+        np_computing_time = end_time - start_time
 
-        print(f"size: {size} own function: {computing_time}s , numpy: {np_computing_time}s")
-        writer.writerow([size, computing_time, np_computing_time])
+        print(f"Multiplications: {num_multiplications}, Custom Time: {custom_computing_time}s, NumPy Time: {np_computing_time}s")
+        writer.writerow([num_multiplications, custom_computing_time, np_computing_time])
 
+print("done")

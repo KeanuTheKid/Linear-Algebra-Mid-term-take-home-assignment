@@ -72,26 +72,71 @@ def strassens_no_rec(A, B):
     return np.vstack((top, bottom))
 
 # Speed-Test
-#I am only using 2**i because otherwise I would have to fill the matrices so they are divideble by 2 or 4
-with open('matrix_times.csv', mode='a', newline='') as file:
-    writer = csv.writer(file)
+# with open('size_speed_comparison.csv', mode='r') as file:
+#     reader = csv.reader(file)
+#     rows = list(reader)
+
+# # Step 2: Add new columns
+# header = rows[0]  # Extract the header
+# header.extend(["Strassen's Optimized", "Another Algorithm"])  # Add new column names
+
+# for row in rows[1:]:  # Skip the header row
+#     size = int(row[0])
+#     A = gen_matrices(size)
+#     B = gen_matrices(size)
+
+#     # Compute new values
+#     start_time = time.time()
+#     optimized_result = strassens_algo(A, B)
+#     end_time = time.time()
+#     optimized_time = end_time - start_time
+
+#     start_time = time.time()
+#     another_result = strassens_no_rec(A, B)
+#     end_time = time.time()
+#     another_time = end_time - start_time
+#     print(f"size: {size} strassens: {optimized_time}s , no rec: {another_time}s")
+#     # Append results to the row
+#     row.extend([optimized_time, another_time])
+
+# with open('size_speed_comparison.csv', mode='w', newline='') as file:
+#     writer = csv.writer(file)
+#     writer.writerows(rows)
     
-    for i in range(1, 10):  
-        size = 2**i
-        A = gen_matrices(size)
-        B = gen_matrices(size)
 
-        # Recursion
-        start_time = time.time()
-        multiplication = strassens_algo(A, B)
-        end_time = time.time()
-        strassens_computing_time = end_time - start_time
 
-        # no Recursion
-        start_time = time.time()
-        np_multiplication = strassens_no_rec(A, B)
-        end_time = time.time()
-        no_rec_strassens_computing_time = end_time - start_time
+with open('amount_speed_comparison.csv', mode='r') as file:
+    reader = csv.reader(file)
+    rows = list(reader)
 
-        print(f"size: {size} strassens: {strassens_computing_time}s , no rec: {no_rec_strassens_computing_time}s")
-        writer.writerow([size, strassens_computing_time, no_rec_strassens_computing_time])
+header = rows[0]  # extract the existing header
+header.extend(["Strassen's Optimized Time", "Strassen's No Rec Time"])
+
+for row in rows[1:]:  # skip the header row
+    num_multiplications = int(row[0])  
+    size = 2  
+
+    A = gen_matrices(size)
+    B = gen_matrices(size)
+
+    start_time = time.time()
+    for _ in range(num_multiplications):
+        optimized_result = strassens_algo(A, B)
+    end_time = time.time()
+    optimized_time = end_time - start_time
+
+    start_time = time.time()
+    for _ in range(num_multiplications):
+        another_result = strassens_no_rec(A, B)
+    end_time = time.time()
+    another_time = end_time - start_time
+
+    print(f"Multiplications: {num_multiplications}, Strassen's Optimized Time: {optimized_time:.6f}s, Strassen's No Rec Time: {another_time:.6f}s")
+    
+    #append results to the current row
+    row.extend([optimized_time, another_time])
+
+#write the updated data back to the CSV
+with open('amount_speed_comparison.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerows(rows)
